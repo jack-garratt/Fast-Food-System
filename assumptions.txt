@@ -1,0 +1,21 @@
+List of assumsions made to create project:
+
+1. Hardware Requirements not set
+    1a. Orders.db and data_controller should be installed on a centralised server
+    1b. Fufilment, ordering and progress are all on different machines around the institution and all comunicate with the centralised server.
+    1c. The ordering program will be hooked up to a large touchscreen that is horizontal
+    1d. There would be a secure payment method avaialble. For now this is represented with a notification window.
+
+2. Database Requirements not set
+    2a. We are asked to create a menu, it is not specified how this should be accessed so i have assumed that it can be manually
+        updated and does not require its own interface
+    2b. We are not told weather to store ordered eveafter completion for data analasys so i have chosen not to to simplify the project
+    2c. We have nto been told what data to store about each menu item. I have chosen to only store basic details but it could be expanded
+        to show extra data like nutritional data.
+
+3. User Accessibility not set
+    3a. We have not been told about any possible user accessibility needs such as dexterity or vision issues, this could cause issues down
+        the line.
+    
+There was also many small and menial assumsions made during the creation of this project that have not affected the final project in any 
+way that would be any different from a real life commercial application. 
