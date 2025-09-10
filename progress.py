@@ -24,7 +24,7 @@ class CookedItem(customtkinter.CTkFrame):
         self.id_label.grid(row = 0, column = 0, padx = 5, pady = 5, sticky = "NEWS")
 
     def on_click(self):
-        self.id_label.configure(text = "", state = "disabled")
+        self.id_label.configure(text = "Collected",font = (font,42), state = "disabled")
         order_collected(self.id)
 
 class CookingItemsFrame(customtkinter.CTkScrollableFrame):
