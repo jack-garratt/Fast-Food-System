@@ -19,6 +19,7 @@ class HeaderFrame(customtkinter.CTkFrame):
         self.title = customtkinter.CTkLabel(self, text="Welcome to Fast Food", font = (font,42))
         self.title.grid(row= 0, column=1 )
 
+
 class AddOrder(customtkinter.CTkFrame):
     def __init__(self,master,item ,**kwargs):
         super().__init__(master,**kwargs)
@@ -65,10 +66,6 @@ class AddOrder(customtkinter.CTkFrame):
         return self.item[0],self.quantity
 
 
-    
-        
-
-
 class MenubodyFrame(customtkinter.CTkFrame):
     def __init__(self,master,item, **kwargs):
         super().__init__(master,**kwargs)
@@ -91,8 +88,6 @@ class MenubodyFrame(customtkinter.CTkFrame):
         self.add_order.grid(row = 0, column = 2, padx = 10, pady = 10, sticky = "nse")
 
 
-
-
 class BodyFrame(customtkinter.CTkScrollableFrame):
     def __init__(self,master, items, **kwargs):
         super().__init__(master,**kwargs)
@@ -106,6 +101,7 @@ class BodyFrame(customtkinter.CTkScrollableFrame):
     def return_items(self):
         return self.bodyFrames
 
+
 class FooterFrame(customtkinter.CTkFrame):
     def __init__(self,master,**kwargs):
         super().__init__(master,**kwargs)
@@ -117,9 +113,6 @@ class FooterFrame(customtkinter.CTkFrame):
 
         self.checkout_button = customtkinter.CTkButton(self,text="Pay",font=(font,36), fg_color="black", text_color="white", hover_color="grey20", command= lambda: App.checkout_popup(app))
         self.checkout_button.grid(row = 0, column = 10, padx = 10, pady = 10, sticky = "nse")#
-
-
-
 
 
 class PaymentNotification(customtkinter.CTkToplevel):
@@ -143,11 +136,6 @@ class PaymentNotification(customtkinter.CTkToplevel):
         self.destroy()
 
         
-
-
-
-
-
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -205,14 +193,6 @@ class App(customtkinter.CTk):
             if item.quantity != 0:
                 self.order.append([item.id, item.quantity])
         createOrder(self.order)
-
-
-        
-
-
-
-
-
 
 
 app = App()

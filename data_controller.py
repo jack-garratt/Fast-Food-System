@@ -71,11 +71,11 @@ def createOrder(order):
     id = random.randint(1000,9999)
     valid = False
     while valid == False:
-        valid = True
         for item in retreiveItems():
             if item[0] == id:              #Prevents multiple order ID's from being the same
                 valid = False
                 id = random.randint(1000,9999)
+        valid = True
                 
 
     print(order)

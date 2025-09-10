@@ -65,9 +65,6 @@ class OrderFrame(customtkinter.CTkFrame):
         move_order_complete(self.order[0])
         
         
-        
-
-
 class ItemFrame(customtkinter.CTkFrame):
     def __init__(self,master,item,items,**kwargs):
         super().__init__(master, **kwargs)

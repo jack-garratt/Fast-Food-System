@@ -14,7 +14,6 @@ class CookingItem(customtkinter.CTkFrame):
         self.id_label.grid(row = 0, column = 0, padx = 5, pady = 5, sticky = "NEWS")
 
 
-
 class CookedItem(customtkinter.CTkFrame):
     def __init__(self,master, id, **kwargs):
         super().__init__(master, **kwargs)
@@ -26,6 +25,7 @@ class CookedItem(customtkinter.CTkFrame):
     def on_click(self):
         self.id_label.configure(text = "Collected",font = (font,42), state = "disabled")
         order_collected(self.id)
+
 
 class CookingItemsFrame(customtkinter.CTkScrollableFrame):
     def __init__(self,master,**kwargs):
@@ -56,6 +56,7 @@ class CookedItemsFrame(customtkinter.CTkScrollableFrame):
             column = count-(2*row)
             itemFrame.grid(row = row, column = column, padx = 5, pady = 5, sticky= "NEWS")
 
+
 class CookingFrame(customtkinter.CTkFrame):
     def __init__(self,master,**kwargs):
         super().__init__(master, **kwargs)
@@ -67,6 +68,7 @@ class CookingFrame(customtkinter.CTkFrame):
         self.itemsFrame = CookingItemsFrame(self, fg_color = "grey20")
         self.itemsFrame.grid(row = 1, column = 0, padx = 5, pady = 5, sticky = "NSEW")
 
+
 class CookedFrame(customtkinter.CTkFrame):
     def __init__(self,master,**kwargs):
         super().__init__(master, **kwargs)
@@ -77,6 +79,7 @@ class CookedFrame(customtkinter.CTkFrame):
         self.label.grid(row = 0, column = 0, columnspan = 2, padx = 5, pady = 5, sticky = "NEW")
         self.itemsFrame = CookedItemsFrame(self, fg_color = "grey20")
         self.itemsFrame.grid(row = 1, column = 0, padx = 5, pady = 5, sticky = "NSEW")
+
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -107,6 +110,7 @@ class App(customtkinter.CTk):
         self.cookedFrame = CookedFrame(self, border_color = "white", fg_color = "grey20")
         self.cookedFrame.grid(row = 0, column = 1, sticky = "NEWS")
         refresh_body(self)
+
 
 app = App()
 app.mainloop()
