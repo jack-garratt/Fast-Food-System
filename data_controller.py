@@ -1,14 +1,16 @@
 import sqlite3
+import os
 import random
+import sys
 
+if __name__ == "__main__":
+    sys.exit("This should not be run directly, please use launcher.py")
 
-def test():
-    conn = sqlite3.connect("orders.db")
-    cursor = conn.cursor()
-    cursor.execute("select * from tblItems")  
-    conn.close() 
+def test(): #Ensure that the user is running the whole project. This is also called by every program at th start.
+    if not os.path.exists("orders.db"):
+        raise FileNotFoundError("orders.db not found. Run launcher.py to create it.")
 
-def create_db():
+def create_db():  #Setup all databases and tables required at once
     conn = sqlite3.connect("orders.db")
     cursor = conn.cursor()
     sqlCommand = """
@@ -20,7 +22,7 @@ def create_db():
     )"""
     cursor.execute(sqlCommand)
 
-    sqlCommand = """
+    sqlCommand = """ 
     CREATE TABLE IF NOT EXISTS tblOrderItems (
     orderID INTEGER  NOT NULL,
     item TEXT NOT NULL,
@@ -36,7 +38,7 @@ def create_db():
     cursor.execute(sqlCommand)    
 
     cursor.execute("Select * from tblItems")
-    if cursor.fetchall() == []:
+    if cursor.fetchall() == []: #In future updates this may be able to be managed by a seperate manager dashboard.
         defaultItems = [[48392175,"Classic Beef Burger","A juicy beef patty grilled to perfection.",4.99],
                         [90317462,"Spicy Chicken Wrap","Crispy spicy chicken strips wrapped in a soft tortilla.",3.49],
                         [17284039,"Loaded Fries"," Golden fries topped with melted cheese and smoked bacon bits.",2.99],
@@ -55,7 +57,7 @@ def create_db():
 
     conn.close()
 
-def retreiveItems():
+def retreiveItems(): #This is for ordering.py so that it can see all items in the database without having to store the list localy.
     conn = sqlite3.connect("orders.db")
     cursor = conn.cursor() 
     cursor.execute("Select * from tblItems")
@@ -63,7 +65,7 @@ def retreiveItems():
     conn.close() 
     return items
 
-def createOrder(order):
+def createOrder(order): #This creates an order ID and then adds the ID and the order to the database so that it can be made by fufillment.py
     conn = sqlite3.connect("orders.db")
     cursor = conn.cursor() 
 
@@ -90,35 +92,35 @@ def createOrder(order):
     conn.close()
 
 
-def fetch_orders():
+def fetch_orders(): #This is a very used module that allows any of the main screens to look up all active orders in an easy and readable form.
     conn = sqlite3.connect("orders.db")
     cursor = conn.cursor() 
     cursor.execute("Select * from tblOrderItems")
     items = cursor.fetchall()  
     orders = []
     ids = []
-    for item in items:
+    for item in items: #Creates a list of all order ID's
         if item[0] not in ids:
             ids.append(item[0])
 
-    for id in ids:
+    for id in ids: #create a list in the orders list where index 0 is the order ID
         orders.append([id])
 
-    for count in range (len(ids)):
+    for count in range (len(ids)): #Add all items to the induvidual order list in the orders array
         for item in items:
             if item[0] == ids[count]:
                 orders[count].append([item[1],item[2],item[3]])
     conn.close()
     return(orders)
 
-def update_status(orderid, itemid, newstatus):
+def update_status(orderid, itemid, newstatus): #This is used when an item is marked as made by the fufillment window so that it is updated in the datbase
     conn = sqlite3.connect("orders.db")
     cursor = conn.cursor() 
     cursor.execute("UPDATE tblOrderItems SET status = ? WHERE orderID == ? AND item == ?",(newstatus,orderid,itemid)) 
     conn.commit()
     conn.close()
 
-def fetch_status(orderid, itemid):
+def fetch_status(orderid, itemid): #This is used so that the fufillment window can recover from a system crash with the same data.
     conn = sqlite3.connect("orders.db")
     cursor = conn.cursor() 
     cursor.execute("SELECT status FROM tblOrderItems WHERE orderID == ? AND item == ?",(orderid,itemid))
@@ -126,7 +128,7 @@ def fetch_status(orderid, itemid):
     conn.close()
     return result
 
-def get_name(itemid):
+def get_name(itemid): #This is used so that the system is able to access the name of an item given only the items ID
     conn = sqlite3.connect("orders.db")
     cursor = conn.cursor() 
     cursor.execute(f"SELECT name FROM tblItems WHERE id = {itemid}")
@@ -134,7 +136,7 @@ def get_name(itemid):
     conn.close()
     return name
 
-def move_order_complete(orderid):
+def move_order_complete(orderid): #This is used when the kitchen send out an order so that it is removed from the active order database. And moved to ready to collect where less information is needed.
     conn = sqlite3.connect("orders.db")
     cursor = conn.cursor() 
     try:
@@ -145,7 +147,7 @@ def move_order_complete(orderid):
     conn.commit()
     conn.close()
 
-def fetch_kitchen_ids():
+def fetch_kitchen_ids(): #This returns a list of all ids that are in the kitchen still being cooked. This is used by the progress window.
     conn = sqlite3.connect("orders.db")
     cursor = conn.cursor()  
     cursor.execute("Select orderID from tblOrderItems")
@@ -157,7 +159,7 @@ def fetch_kitchen_ids():
             ids.append(id)
     return ids
 
-def fetch_sent_ids():
+def fetch_sent_ids(): #This retreives a list of all ID's that have been sent out by the kitchen but nto yet collected.
     conn = sqlite3.connect("orders.db")
     cursor = conn.cursor()  
     cursor.execute("Select * from tblCompleted")
@@ -165,7 +167,7 @@ def fetch_sent_ids():
     conn.close()
     return ids
 
-def order_collected(orderID):
+def order_collected(orderID): # This removes orders from the database when they are collected. In an updated version this would move to a database to be analyzed by a manager.
     conn = sqlite3.connect("orders.db")
     cursor = conn.cursor() 
     cursor.execute(f"DELETE FROM tblCompleted WHERE orderID = {orderID}")

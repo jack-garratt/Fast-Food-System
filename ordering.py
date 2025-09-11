@@ -1,15 +1,19 @@
+try:
+    from data_controller import test,retreiveItems,createOrder
+except ImportError or ModuleNotFoundError:
+    sys.exit("Unable to connect to data_controller. Ensure you have the whole project open in your explorer.")
 
 import customtkinter
+import sys
 from PIL import Image
-from data_controller import test,retreiveItems,createOrder
 font = "Comic Sans MS"
+
 try:
     test()
-except:
-    raise Exception("Unable to connect to data_controller. Ensure you have the whole project open in your explorer and that you have run launcher.py in order to create orders.db")
+except FileNotFoundError as e:
+    sys.exit(e)
 
-
-class HeaderFrame(customtkinter.CTkFrame):
+class HeaderFrame(customtkinter.CTkFrame): 
     def __init__(self,master, **kwargs):
         super().__init__(master,**kwargs)
         self.grid_columnconfigure((0,1,2), weight=1)    
@@ -20,7 +24,7 @@ class HeaderFrame(customtkinter.CTkFrame):
         self.title.grid(row= 0, column=1 )
 
 
-class AddOrder(customtkinter.CTkFrame):
+class AddOrder(customtkinter.CTkFrame): #This is what allows the user to adjust the quantity of each item in their order
     def __init__(self,master,item ,**kwargs):
         super().__init__(master,**kwargs)
         self.quantity = 0
@@ -32,7 +36,7 @@ class AddOrder(customtkinter.CTkFrame):
         self.add_button = customtkinter.CTkButton(self, text = "Add to order", font = (font,24), fg_color="black" , text_color="white", hover_color="grey20",command=self.addToOrder)
         self.add_button.grid(row = 1, column = 0, columnspan = 3, padx = 10, pady = 10, sticky = "news")
 
-    def addToOrder(self):
+    def addToOrder(self):#Updates the Order frame to show there is one item in the order also shows the add and remove buttons
         self.add_button.destroy()
         self.quantity = 1
         self.remove_button = customtkinter.CTkButton(self, text = "-", font = (font,16), fg_color="black", text_color="white", width= 40, hover_color="grey20", command= self.decreaseQuantity)
@@ -43,13 +47,13 @@ class AddOrder(customtkinter.CTkFrame):
         self.add_button.grid(row=1, column = 2)
         app.check_totals()
 
-    def increaseQuantity(self):
+    def increaseQuantity(self):#Adds another of the items to the order
         self.quantity +=1
         self.count_label.configure(text = str(self.quantity))
         app.check_totals()
 
-    def decreaseQuantity(self):
-        if self.quantity-1 == 0:
+    def decreaseQuantity(self): 
+        if self.quantity-1 == 0: #If the user tries to remove an item with only one left then it removed it and resets it to add order
             self.remove_button.destroy()
             self.count_label.destroy()
             self.add_button.destroy()
@@ -58,15 +62,15 @@ class AddOrder(customtkinter.CTkFrame):
             self.quantity = 0
             app.check_totals()
         else:
-            self.quantity -= 1
+            self.quantity -= 1 
             self.count_label.configure(text = str(self.quantity))
             app.check_totals()
 
-    def getInfo(self):
+    def getInfo(self): #Returns item id and current selected quantity used when calculating price.
         return self.item[0],self.quantity
 
 
-class MenubodyFrame(customtkinter.CTkFrame):
+class MenubodyFrame(customtkinter.CTkFrame): #Frame that contains all information on the item. This could be expanded in the future for more information
     def __init__(self,master,item, **kwargs):
         super().__init__(master,**kwargs)
         self.grid_columnconfigure((1), weight=1)
@@ -91,7 +95,7 @@ class MenubodyFrame(customtkinter.CTkFrame):
 class BodyFrame(customtkinter.CTkScrollableFrame):
     def __init__(self,master, items, **kwargs):
         super().__init__(master,**kwargs)
-        #Hold the menu item frames#
+        #Hold the menu item frames
         self.bodyFrames = []
         for count in range (len(items)):
             self.grid_columnconfigure((0), weight=1)
@@ -102,7 +106,7 @@ class BodyFrame(customtkinter.CTkScrollableFrame):
         return self.bodyFrames
 
 
-class FooterFrame(customtkinter.CTkFrame):
+class FooterFrame(customtkinter.CTkFrame): #Allows the user to see their total
     def __init__(self,master,**kwargs):
         super().__init__(master,**kwargs)
         self.totalPrice = 0
@@ -112,10 +116,10 @@ class FooterFrame(customtkinter.CTkFrame):
         self.price_label.grid(row = 0, column = 9, sticky = "nse")
 
         self.checkout_button = customtkinter.CTkButton(self,text="Pay",font=(font,36), fg_color="black", text_color="white", hover_color="grey20", command= lambda: App.checkout_popup(app))
-        self.checkout_button.grid(row = 0, column = 10, padx = 10, pady = 10, sticky = "nse")#
+        self.checkout_button.grid(row = 0, column = 10, padx = 10, pady = 10, sticky = "nse") #This trigers a notifcation to open so they can "confirm payment"
 
 
-class PaymentNotification(customtkinter.CTkToplevel):
+class PaymentNotification(customtkinter.CTkToplevel): #Simple TopLevel Notification so that the user can clearly see the order is submitted.
     def __init__(self,master,**kwargs):
         super().__init__(master,**kwargs)
         self.geometry("300x500")
@@ -186,7 +190,7 @@ class App(customtkinter.CTk):
         else:
             self.orderConfimation_window.focus()
 
-    def submit_order(self):
+    def submit_order(self): #Uses the create_order functinon to easily write the order to the database
         self.order = []
         for item in self.bodyFrame.return_items():           
             item.id, item.quantity = item.add_order.getInfo()

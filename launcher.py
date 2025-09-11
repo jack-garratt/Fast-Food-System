@@ -22,6 +22,9 @@ if __name__ == "__main__":
         else:
             raise Exception(f"Unable to launch {screen}. Ensure you have the whole project open in your explorer")
         
-
+#Ensure you are running in the .venv to insure all packages are installed
+#In order to do this in VS code use controll shift and P
+#Find Python: Select Interpreter
+#If the proiject is open correctly select Python 3.13.7 (.venv)
 
 #The launch function and line 5 have been inspired from multiple online sources and was NOT desined by myself.
