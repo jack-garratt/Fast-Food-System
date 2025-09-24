@@ -5,8 +5,8 @@ A Python ordering and  GUI built with CustomTkinter, simulating a fast-food orde
 ## Features
 - Select items from a menu
 - Select Quantity of items
-- Subit order to a database
-- Retreive orders from a database
+- Submit order to a database
+- Retrieve orders from a database
 - Update Order Status
 - Send out order for collection
 - View orders that are being made
@@ -24,8 +24,8 @@ A Python ordering and  GUI built with CustomTkinter, simulating a fast-food orde
 <details>
 <summary>Click to view Fufillment Page</summary>
 
-### Fufullment Page
-![Fufillment Page](screenshots/fufillment.png)
+### Fulfillment Page
+![Fulfillment Page](screenshots/fufillment.png)
 </details>
 
 <details>
@@ -45,7 +45,7 @@ Install dependencies:
 ```bash
 pip install customtkinter
 pip install pillow
-python launcher.py
-
 ```
-
+```bash
+python launcher.py
+```
