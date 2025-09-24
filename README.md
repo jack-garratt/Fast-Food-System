@@ -22,14 +22,14 @@ A Python ordering and  GUI built with CustomTkinter, simulating a fast-food orde
 </details>
 
 <details>
-<summary>Click to view Ordering Page</summary>
+<summary>Click to view Fufillment Page</summary>
 
 ### Fufullment Page
 ![Fufillment Page](screenshots/fufillment.png)
 </details>
 
 <details>
-<summary>Click to view Ordering Page</summary>
+<summary>Click to view Progress Page</summary>
 
 ### Progress Page
 ![Progress Page](screenshots/progress.png)
